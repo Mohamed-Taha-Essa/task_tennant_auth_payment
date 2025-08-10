@@ -40,7 +40,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 SHARED_APPS = [
     'django_tenants',
-    'a_tenant_manager',
+    
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,7 +55,7 @@ SHARED_APPS = [
     "accounts",
     "subscriptions",
     "payment",
-
+ 
 ]
 
 TENANT_APPS = [
@@ -72,11 +72,10 @@ TENANT_APPS = [
    
     # tenant apps
     "accounts",
-    "subscriptions",
-    "payment",
+   
 ]
 
-INSTALLED_APPS = SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
+INSTALLED_APPS = ['a_tenant_manager',] + SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
