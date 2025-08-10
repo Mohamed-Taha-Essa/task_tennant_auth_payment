@@ -7,6 +7,22 @@ from django.conf import settings
 User = get_user_model()
 
    
+class TenantSignupSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+    company_name = serializers.CharField(required=True, max_length=100)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email','password', 'password2', 'company_name']
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        # You can add validation for company_name here if needed
+        return attrs
+
+
 class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)

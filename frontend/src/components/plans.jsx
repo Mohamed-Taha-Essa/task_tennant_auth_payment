@@ -24,7 +24,8 @@ const Plans = () => {
     const fetchPlans = async () => {
       try {
         // Ensure your Django backend is running and accessible at this URL
-        const response = await axios.get('http://127.0.0.1:8000/subscriptions/api/plans/');
+        const apiUrl = `${window.location.protocol}//${window.location.hostname}:8000`;
+        const response = await axios.get(`${apiUrl}/subscriptions/api/plans/`);
         setPlans(response.data);
       } catch (error) {
         setError(error.message);

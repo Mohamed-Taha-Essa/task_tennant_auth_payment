@@ -46,6 +46,9 @@ function AppNavbar() {
           <Button variant="success" size="sm" as={Link} to="/signup" className="text-decoration-none">
             Sign Up
           </Button>
+          <Button variant="info" size="sm" as={Link} to="/create-tenant" className="text-decoration-none">
+            Create Workspace
+          </Button>
         </div>
       );
     }

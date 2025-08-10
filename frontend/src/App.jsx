@@ -7,6 +7,7 @@ import Payment from './components/payment/Payment';
 import Success from './components/payment/Success';
 import Cancel from './components/payment/Cancel';
 import ProtectedRoute from './components/ProtectedRoute';
+import CreateTenant from './components/auth/CreateTenant';
 import './App.css';
 import AppNavbar from './components/ui/navbar';
 import { Container } from 'react-bootstrap';
@@ -32,7 +33,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/plans" element={<Plans />} />
+                <Route path="/plans" element={<Plans />} />
+        <Route path="/create-tenant" element={<CreateTenant />} />
         
         {/* Protected Routes */}
         <Route 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000'; // Replace with your Django backend URL
+const API_URL = `${window.location.protocol}//${window.location.hostname}:8000`; // Dynamically set API_URL
 
 export const signUp = (userData) => {
   const fullUrl = `${API_URL}/api/accounts/signup/`;

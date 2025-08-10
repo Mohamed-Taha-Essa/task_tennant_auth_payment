@@ -12,7 +12,9 @@ from django.contrib.auth.tokens import default_token_generator
 from rest_framework import generics
 from .models import CustomUser
 from .serializers import UserSignupSerializer
-from .serializers import UserSignupSerializer , CustomUserSerializer
+from .serializers import TenantSignupSerializer, UserSignupSerializer, CustomUserSerializer
+from a_tenant_manager.models import Tenant, Domain
+from django.db import transaction, connection
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.files.storage import default_storage
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -62,6 +64,67 @@ class UserLogoutAPI(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TenantSignupAPI(APIView):
+    permission_classes = [AllowAny]
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = TenantSignupSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        validated_data = serializer.validated_data
+        company_name = validated_data.pop('company_name')
+        
+        # Create the user in the public schema
+        user_data = {
+            'first_name': validated_data['first_name'],
+            'last_name': validated_data['last_name'],
+            'email': validated_data['email'],
+        }
+        user = get_user_model().objects.create_user(**user_data, password=validated_data['password'])
+
+        # Sanitize company name for schema and domain
+        sanitized_name = ''.join(filter(str.isalnum, company_name.lower()))
+        schema_name = f"{sanitized_name}{user.id}" 
+
+        # Create the tenant
+        tenant = Tenant.objects.create(
+            schema_name=schema_name,
+            name=company_name,
+            owner=user,         
+        )
+ 
+        # Create the domain
+        domain = Domain.objects.create(
+            domain=f"{schema_name}.localhost", # Assuming localhost for development
+            tenant=tenant,
+            is_primary=True
+        )
+
+        # Switch to the new tenant's schema to create a superuser for it
+        connection.set_tenant(tenant)
+
+        # Create a superuser for the new tenant
+        tenant_user = get_user_model().objects.create_superuser(
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+
+        # Switch back to the public schema
+        connection.set_schema_to_public()
+
+        return Response({
+            "message": "Tenant and user created successfully.",
+            "user_id": user.id,
+            "tenant_id": tenant.id,
+            "domain": domain.domain
+        }, status=status.HTTP_201_CREATED)
 
 
 class UserSignupAPI(APIView):
