@@ -147,13 +147,14 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = (
-    'django_tenants.routers.TenantSyncRouter',
-)
 
 TENANT_MODEL = "a_tenant_manager.Tenant"
 TENANT_DOMAIN_MODEL = "a_tenant_manager.Domain"
 
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)
+SHOW_PUBLIC_IF_NO_TENANT_FOUND = True
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
