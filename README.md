@@ -306,20 +306,3 @@ This project is set up for Dockerized deployment, making it portable across vari
         │       └── navbar.jsx
         └── store/
             └── authStore.js
-```
-
-## Contributing Guidelines
-
-We welcome contributions to the Task Tenant project! To contribute:
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix (`git checkout -b feature/your-feature-name`).
-3.  Make your changes, ensuring they adhere to the existing code style and conventions.
-4.  Write clear, concise commit messages.
-5.  Push your branch and open a Pull Request.
-
-Please ensure your code passes all tests and linting checks before submitting.
-
-## License
-
-This project is licensed under the BSD License. See the `LICENSE` file in the root of the repository for details.
