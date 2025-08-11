@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data-new:/var/lib/postgresql/data
     networks:
       - tenants-net
 
@@ -51,7 +51,7 @@ services:
       - tenants-net
 
 volumes:
-  postgres-data:
+  postgres-data-new:
 
 networks:
   tenants-net:

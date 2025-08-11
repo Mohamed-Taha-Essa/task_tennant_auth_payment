@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-)4!08r2pywh-g05#1e7ecw_*n+l9*w&tj6)o@h#rx^k_^d54l+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -40,7 +40,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 SHARED_APPS = [
     'django_tenants',
-    
+    'a_tenant_manager',
+      'jazzmin',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,6 +60,7 @@ SHARED_APPS = [
 ]
 
 TENANT_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,7 +77,7 @@ TENANT_APPS = [
    
 ]
 
-INSTALLED_APPS = ['a_tenant_manager',] + SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
+INSTALLED_APPS =  SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -141,7 +143,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': os.getenv('POSTGRES_HOST', 'postgres'),
         'PORT': '5432',
     }
 }
